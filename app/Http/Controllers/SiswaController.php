@@ -3,8 +3,10 @@
 namespace App\Http\Controllers; 
  
 use Illuminate\Http\Request; 
-use App\Siswa; 
+use App\Siswa;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\DB;
  
 class SiswaController extends Controller 
 { 
@@ -92,7 +94,40 @@ class SiswaController extends Controller
             return Response()->json(['status' => 0]); 
         } 
     }
-    
+
+    public function uploadImage(Request $request, $id)
+    {
+        $validator=Validator::make($request->all(),
+        [
+            'image' => 'required|image|mimes:jpeg,png,jpg'
+        ]);
+
+        if($validator->fails()){
+            return Response()->json($validator->errors());
+        }
+
+        $imageName = time().'.'.request()->image->getClientOriginalExtension();
+        request()->image->move(public_path('images'),$imageName);
+
+        $ubah = Siswa::where('id',$id)->update([
+            'image' => $imageName
+        ]);
+
+        if($ubah){
+            $data = Siswa::where('nama_siswa','=',$request->nama_siswa)->get();
+            return response()->json([
+                'status' => 1,
+                'message' => 'Success upload new image!',
+                'data' => $data
+            ]);
+        } else {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Failed upload new image!'
+            ]);
+        }
+    }
+
     public function destroy($id)
     {
         $hapus = Siswa::where('id', $id)->delete();

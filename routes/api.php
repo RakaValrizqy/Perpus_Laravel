@@ -20,6 +20,7 @@ Route::group(['middleware' => ['jwt.verify']], function(){
         Route::post('/kelas', 'KelasController@store'); 
         Route::put('/siswa/{id}', 'SiswaController@update'); 
         Route::post('/siswa', 'SiswaController@store'); 
+        Route::post('/siswa/uploadImage/{id}', 'SiswaController@uploadImage'); 
         Route::put('/buku/{id}', 'BukuController@update'); 
         Route::post('/buku/uploadCover/{id}', 'BukuController@uploadCover'); 
         Route::post('/buku', 'BukuController@store'); 

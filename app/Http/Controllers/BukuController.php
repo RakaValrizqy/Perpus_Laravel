@@ -134,7 +134,7 @@ class BukuController extends Controller
         { 
             return response()->json([
                 'status' => 0,
-                'message' => 'Failed upload Book!'
+                'message' => 'Failed upload cover!'
             ]); 
         } 
     }
